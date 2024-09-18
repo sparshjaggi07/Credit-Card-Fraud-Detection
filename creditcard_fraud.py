@@ -1,4 +1,5 @@
 import timeit
+import gdown
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -8,8 +9,13 @@ warnings.filterwarnings("ignore")
 
 import streamlit as st
 st.title('Credit Card Fraud Detection!')
+file_url = 'https://drive.google.com/file/d/1yz8yOos6YI8nCB7ErJFTsxdjQtlGPCV-/view?usp=sharing'
 
-df=st.cache_data(pd.read_csv)('https://drive.google.com/drive/u/0/home/creditcard.csv',on_bad_lines='skip')
+# Download the file
+gdown.download(file_url, 'data.csv', quiet=False)
+
+# Read the CSV using pandas
+df = pd.read_csv('data.csv')
 
 #df = df.sample(frac=0.1, random_state = 48)
 
