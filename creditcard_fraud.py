@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore")
 import streamlit as st
 st.title('Credit Card Fraud Detection!')
 
-df=st.cache_data(pd.read_csv)('https://drive.google.com/file/d/1yz8yOos6YI8nCB7ErJFTsxdjQtlGPCV-/view?usp=sharing')
+df=st.cache_data(pd.read_csv)('creditcard.csv')
 
 #df = df.sample(frac=0.1, random_state = 48)
 
