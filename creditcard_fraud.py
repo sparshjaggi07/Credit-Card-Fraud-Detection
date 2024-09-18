@@ -2,20 +2,41 @@ import timeit
 import gdown
 import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.express as px
 import numpy as np
 import warnings
+import streamlit as st
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+from sklearn.metrics import confusion_matrix, classification_report, matthews_corrcoef
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import NearMiss
+
 warnings.filterwarnings("ignore")
 
-import streamlit as st
 st.title('Credit Card Fraud Detection!')
-file_url = 'https://drive.google.com/file/d/1yz8yOos6YI8nCB7ErJFTsxdjQtlGPCV-/view?usp=sharing'
+
+# Corrected Google Drive link
+file_url = 'https://drive.google.com/uc?id=1yz8yOos6YI8nCB7ErJFTsxdjQtlGPCV-&export=download'
 
 # Download the file
 gdown.download(file_url, 'data.csv', quiet=False)
 
-# Read the CSV using pandas
-df = pd.read_csv('data.csv',encoding='utf-8')
+# Try reading the CSV with enhanced error handling
+try:
+    df = pd.read_csv('data.csv', encoding='utf-8', error_bad_lines=False, warn_bad_lines=True)
+except pd.errors.ParserError as e:
+    st.write(f"Error reading CSV: {e}")
+except Exception as e:
+    st.write(f"An unexpected error occurred: {e}")
+
+# Visualize first few lines of the file for debugging
+with open('data.csv', 'r', encoding='utf-8') as file:
+    first_lines = [file.readline() for _ in range(5)]
+    st.write("First few lines of the file to check formatting:")
+    st.write(first_lines)
 
 #df = df.sample(frac=0.1, random_state = 48)
 
