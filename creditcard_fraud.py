@@ -1,57 +1,15 @@
 import timeit
-import gdown
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 import numpy as np
 import warnings
-import streamlit as st
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
-from sklearn.metrics import confusion_matrix, classification_report, matthews_corrcoef
-from imblearn.over_sampling import SMOTE
-from imblearn.under_sampling import NearMiss
-
 warnings.filterwarnings("ignore")
 
+import streamlit as st
 st.title('Credit Card Fraud Detection!')
 
-# Corrected Google Drive link
-file_url = 'https://drive.google.com/uc?id=1yz8yOos6YI8nCB7ErJFTsxdjQtlGPCV-&export=download'
-
-# Download the file
-gdown.download(file_url, 'data.csv', quiet=False)
-
-# Initialize df to None
-df = None
-
-# Try reading the CSV with enhanced error handling
-try:
-    df = pd.read_csv('data.csv', encoding='utf-8', error_bad_lines=False, warn_bad_lines=True)
-    st.write("CSV loaded successfully!")
-except pd.errors.ParserError as e:
-    st.error(f"Error reading CSV: {e}")
-except Exception as e:
-    st.error(f"An unexpected error occurred: {e}")
-    
-# Check if df is defined
-if df is None:
-    st.error("Dataframe could not be created. Please check the CSV file.")
-    st.stop()
-
-# Visualize first few lines of the file for debugging
-with open('data.csv', 'r', encoding='utf-8') as file:
-    first_lines = [file.readline() for _ in range(5)]
-    st.write("First few lines of the file to check formatting:")
-    st.write(first_lines)
-
-# Now, proceed with the rest of your code if df was successfully loaded
-if st.sidebar.checkbox('Show what the dataframe looks like'):
-    st.write(df.head(100))
-    st.write('Shape of the dataframe: ', df.shape)
-    st.write('Data description: \n', df.describe())
+df=st.cache_data(pd.read_csv)('creditcard.csv')
 
 #df = df.sample(frac=0.1, random_state = 48)
 
@@ -252,13 +210,13 @@ if st.sidebar.checkbox('Run a credit card fraud detection model'):
         elif imb_rect=='SMOTE':
                 rect=smt
                 st.write('Shape of imbalanced y_train: ',np.bincount(y_train))
-                X_train_bal, y_train_bal = rect.fit_sample(X_train_sfs_scaled, y_train)
+                X_train_bal, y_train_bal = rect.fit_resample(X_train_sfs_scaled, y_train)
                 st.write('Shape of balanced y_train: ',np.bincount(y_train_bal))
                 compute_performance(model, X_train_bal, y_train_bal,X_test_sfs_scaled,y_test)
         elif imb_rect=='Near Miss':
             rect=nr
             st.write('Shape of imbalanced y_train: ',np.bincount(y_train))
-            X_train_bal, y_train_bal = rect.fit_sample(X_train_sfs_scaled, y_train)
+            X_train_bal, y_train_bal = rect.fit_resample(X_train_sfs_scaled, y_train)
             st.write('Shape of balanced y_train: ',np.bincount(y_train_bal))
             compute_performance(model, X_train_bal, y_train_bal,X_test_sfs_scaled,y_test)  
             
@@ -269,13 +227,13 @@ if st.sidebar.checkbox('Run a credit card fraud detection model'):
         elif imb_rect=='SMOTE':
                 rect=smt
                 st.write('Shape of imbalanced y_train: ',np.bincount(y_train))
-                X_train_bal, y_train_bal = rect.fit_sample(X_train_sfs_scaled, y_train)
+                X_train_bal, y_train_bal = rect.fit_resample(X_train_sfs_scaled, y_train)
                 st.write('Shape of balanced y_train: ',np.bincount(y_train_bal))
                 compute_performance(model, X_train_bal, y_train_bal,X_test_sfs_scaled,y_test)
         elif imb_rect=='Near Miss':
             rect=nr
             st.write('Shape of imbalanced y_train: ',np.bincount(y_train))
-            X_train_bal, y_train_bal = rect.fit_sample(X_train_sfs_scaled, y_train)
+            X_train_bal, y_train_bal = rect.fit_resample(X_train_sfs_scaled, y_train)
             st.write('Shape of balanced y_train: ',np.bincount(y_train_bal))
             compute_performance(model, X_train_bal, y_train_bal,X_test_sfs_scaled,y_test)
             
