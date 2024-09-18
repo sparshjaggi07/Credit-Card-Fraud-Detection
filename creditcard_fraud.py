@@ -15,7 +15,7 @@ file_url = 'https://drive.google.com/file/d/1yz8yOos6YI8nCB7ErJFTsxdjQtlGPCV-/vi
 gdown.download(file_url, 'data.csv', quiet=False)
 
 # Read the CSV using pandas
-df = pd.read_csv('data.csv')
+df = pd.read_csv('data.csv',encoding='utf-8')
 
 #df = df.sample(frac=0.1, random_state = 48)
 
